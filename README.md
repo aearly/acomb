@@ -1,4 +1,4 @@
-# acomb
+# acomb  [![Build Status via Travis CI](https://travis-ci.org/aearly/acomb.svg?branch=master)](https://travis-ci.org/aearly/acomb) [![NPM version](http://img.shields.io/npm/v/acomb.svg)](https://www.npmjs.org/package/acomb)
 
 Higher-order utilities for use with async functions.
 
@@ -9,6 +9,7 @@ Designed for use with [async](https://github.com/caolan/async).  Allows you to w
 * [constant](#constant)
 * [asyncify](#asyncify)
 * [flip](#flip)
+* [partialRight](#partialRight)
 
 ### constant(value)
 

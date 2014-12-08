@@ -4,7 +4,7 @@
   "description": "Higher-order utilities for use with async functions",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test.js -R spec",
+    "test": "npm run-script lint && mocha test.js -R spec",
     "watch": "mocha --watch -R spec --growl",
     "lint": "jshint -c .jshintrc test.js index.js"
   },
