@@ -1,6 +1,5 @@
-
-
 var acomb = module.exports = {};
+var _slice = [].slice;
 
 acomb.constant = function constant(value) {
   return function (callback) {
@@ -22,10 +21,20 @@ acomb.asyncify = function asyncify(func) {
   };
 };
 
+
+acomb.flip = function flip(func) {
+  return function (cb/*, args..*/ ) {
+    var args = _slice.call(arguments, 1);
+    args.push(cb);
+    func.apply(this, args);
+  };
+};
+
+
 function _last(arr) {
   return arr[arr.length - 1];
 }
 
 function _initial(arr) {
-  return [].slice.call(arr, 0, arr.length - 1);
+  return _slice.call(arr, 0, arr.length - 1);
 }

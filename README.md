@@ -38,3 +38,20 @@ async.waterfall([
   }
 ], callback)
 ```
+
+### flip(function)
+
+Take a function and move the last argument to the front.  Useful for plugging "normal" async functions into `async.auto`.
+
+```
+
+function getUrl(options, callback) {
+  // ....
+}
+
+async.auto({
+  url: acomb.constant("http://foo.com")
+  data: ["url", acomb.flip(getUrl)],
+  //...
+}, callback)
+```
