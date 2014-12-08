@@ -1,0 +1,35 @@
+{
+  "name": "acomb",
+  "version": "1.0.0",
+  "description": "Higher-order utilities for use with async functions",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test.js -R spec",
+    "watch": "mocha --watch -R spec --growl",
+    "lint": "jshint -c .jshintrc test.js index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@github.com/aearly/acomb"
+  },
+  "keywords": [
+    "async",
+    "combinators",
+    "functional",
+    "callbacks",
+    "pointfree"
+  ],
+  "author": "Alexander Early",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/aearly/acomb/issues"
+  },
+  "homepage": "https://github.com/aearly/acomb",
+  "devDependencies": {
+    "better-assert": "~1.0.2",
+    "grunt": "~0.4.5",
+    "grunt-release": "~0.9.0",
+    "jshint": "~2.5.10",
+    "mocha": "~2.0.1"
+  }
+}
