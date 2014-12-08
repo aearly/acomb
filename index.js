@@ -24,12 +24,21 @@ acomb.asyncify = function asyncify(func) {
 
 acomb.flip = function flip(func) {
   return function (cb/*, args..*/ ) {
-    var args = _slice.call(arguments, 1);
+    var args = _rest(arguments);
     args.push(cb);
     func.apply(this, args);
   };
 };
 
+
+acomb.partialRight = function partialRight(func/*, boundArgs... */) {
+  var boundArgs = _rest(arguments);
+  return function (/*...args, callback*/) {
+    var callback = _last(arguments);
+    var newArgs = _initial(arguments).concat(boundArgs).concat([callback]);
+    func.apply(this, newArgs);
+  };
+};
 
 function _last(arr) {
   return arr[arr.length - 1];
@@ -37,4 +46,8 @@ function _last(arr) {
 
 function _initial(arr) {
   return _slice.call(arr, 0, arr.length - 1);
+}
+
+function _rest(arr) {
+  return _slice.call(arr, 1);
 }

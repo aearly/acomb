@@ -57,6 +57,20 @@ describe("flip", function () {
   });
 });
 
+describe("partialRight", function () {
+  it("should apply partially from the right", function (done) {
+    a.partialRight(function (x, y, z, w, cb) {
+      assert(x === 1);
+      assert(y === 2);
+      assert(z === 3);
+      assert(w === 4);
+      assert(typeof cb === "function");
+      assert(arguments.length === 5);
+      done();
+    }, 3, 4)(1, 2, function () {});
+  });
+});
+
 /*describe("before", function () {
   it("should run a function before another", function (done) {
     var f = a.before(func, body)
