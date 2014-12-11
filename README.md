@@ -11,6 +11,7 @@ Designed for use with [async](https://github.com/caolan/async).  Allows you to w
 * [flip](#flip)
 * [partialRight](#partialRight)
 
+<a name="constant">
 ### constant(value)
 
 Returns a function that calls-back with the value provided.  Useful in waterfalls.
@@ -26,6 +27,7 @@ async.waterfall([
 ```
 
 
+<a name="asyncify">
 ### asyncify(func)
 
 Take a sync function and make it async.  Useful for plugging sync functions into a waterfall or series.  Will catch errors and pass them to the callback.
@@ -41,6 +43,8 @@ async.waterfall([
 ], callback)
 ```
 
+
+<a name="flip">
 ### flip(function)
 
 Take a function and move the last argument to the front.  Useful for plugging "normal" async functions into `async.auto`.
@@ -58,6 +62,8 @@ async.auto({
 ```
 
 
+
+<a name="partialRight">
 ### partialRight(func, args...)
 
 Like `_.partialRight`, except it leaves space for a callback at the end.  Useful for getting args in the right order when passing functions to async functions.
@@ -70,3 +76,8 @@ async.map(
     // files is an array of strings, rather than buffers
   });
 ```
+
+
+## License
+
+MIT
