@@ -1,5 +1,6 @@
 var a = require("./");
 var assert = require("better-assert");
+var noop = function () {};
 
 
 describe("constant", function () {
@@ -29,7 +30,7 @@ describe("asyncify", function () {
       assert(x === 1);
       assert(y === 2);
       assert(z === 3);
-    })(1, 2, 3, function () {});
+    })(1, 2, 3, noop);
   });
 
   it("should catch errors", function (done) {
@@ -53,7 +54,7 @@ describe("flip", function () {
       assert(typeof cb === "function");
       assert(arguments.length === 4);
       done();
-    })(function () {}, 1, 2, 3);
+    })(noop, 1, 2, 3);
   });
 });
 
@@ -67,7 +68,7 @@ describe("partialRight", function () {
       assert(typeof cb === "function");
       assert(arguments.length === 5);
       done();
-    }, 3, 4)(1, 2, function () {});
+    }, 3, 4)(1, 2, noop);
   });
 });
 
@@ -77,7 +78,7 @@ describe("spreadOptions", function () {
       assert(x === 1);
       assert(y === 2);
       assert(typeof cb === "function");
-    }, "x", "y")({x: 1, y: 2}, function () {});
+    }, "x", "y")({x: 1, y: 2}, noop);
   });
 
   it("should also work with an array arg", function () {
@@ -85,7 +86,7 @@ describe("spreadOptions", function () {
       assert(x === 1);
       assert(y === 2);
       assert(typeof cb === "function");
-    }, ["x", "y"])({x: 1, y: 2}, function () {});
+    }, ["x", "y"])({x: 1, y: 2}, noop);
   });
 
   it("should work in conjunction with flip", function () {
@@ -93,13 +94,61 @@ describe("spreadOptions", function () {
       assert(x === 1);
       assert(y === 2);
       assert(typeof cb === "function");
-    }, ["x", "y"]))(function () {}, {x: 1, y: 2});
+    }, ["x", "y"]))(noop, {x: 1, y: 2});
   });
 });
 
-/*describe("before", function () {
-  it("should run a function before another", function (done) {
-    var f = a.before(func, body)
-  });
-});*/
+describe("before", function () {
+  function add2(x) { return x + 2; }
 
+  it("should run a function before another", function (done) {
+    var f = a.before(add2, function (y, callback) {
+      callback(null, y);
+    });
+    f(1, function (err, result) {
+      assert(result === 3);
+      done();
+    });
+  });
+
+  it("should catch errors in the before function", function (done) {
+    a.before(function () {
+      throw new Error("foo");
+    }, noop)("asdf", function (err) {
+      assert(err.message === "foo");
+      done();
+    });
+  });
+});
+
+describe("after", function () {
+
+  function mul(x, y) { return x * y; }
+
+  it("should run a function after", function (done) {
+    var f = a.after(function(cb) { return cb(null, 4, 5); }, mul);
+    f(function (err, result) {
+      assert(result === 20);
+      done();
+    });
+  });
+
+  it("should catch errors in the after function", function (done) {
+    a.after(
+      function (arg, cb) { return cb(null, arg); },
+      function () {
+        throw new Error("foo");
+      })("asdf", function (err) {
+        assert(err.message === "foo");
+        done();
+      });
+  });
+  it("should catch errors in the async function", function (done) {
+    a.after(
+      function (arg, cb) { return cb(new Error("foo")); },
+      noop)("asdf", function (err) {
+        assert(err.message === "foo");
+        done();
+      });
+  });
+});

@@ -57,6 +57,39 @@ acomb.spreadOptions = function spreadOptions(func, option1/*, option2...*/) {
   };
 };
 
+acomb.before = function before(func, asyncBody) {
+  return function (/* args..., callback */) {
+    var args = _initial(arguments);
+    var callback = _last(arguments);
+    var result;
+    try {
+      result = func.apply(this, args);
+    } catch (e) {
+      return callback(e);
+    }
+    asyncBody.call(this, result, callback);
+  };
+};
+
+acomb.after = function after(asyncBody, func) {
+  return function (/* args..., callback */) {
+    var args = _initial(arguments);
+    var callback = _last(arguments);
+    args.push(function newCb(err/*, results...*/) {
+      if (err) { return callback(err); }
+      var results = _rest(arguments);
+      var result;
+      try {
+        result = func.apply(null, results);
+      } catch (e) {
+        return callback(e);
+      }
+      callback(null, result);
+    });
+    asyncBody.apply(this, args);
+  };
+};
+
 function _last(arr) {
   return arr[arr.length - 1];
 }

@@ -97,6 +97,39 @@ async.auto({
 ```
 
 
+<a name="before">
+### before(func, asyncFunc)
+
+Run a synchronous function before an async function.  The synchronous function will be called with the aguments passed (without the callback), and the async function will be called with the return value of the sync function.
+
+```js
+function trim (str) { return str.trim(); }
+
+async.waterfall([
+  getMessyInput,
+  acomb.before(trim, function parseData(str, next) {
+    // `str` has its whitespace trimmed
+    //...
+  }),
+  //...
+], callback)
+
+```
+
+<a name="after">
+### before(asyncFunc, func)
+
+Run a synchronous function after an async function, with the results of the async function as arguments. The return value of the sync function will be passed to the original callback.
+
+```js
+var getTheDataIWant = acomb.after(getData, function (data) {
+  return _.pick(data, ["foo", "bar", "baz"])
+});
+```
+
+*note: If you want to run an async function before or after another,  just use `async.seq` or `async.compose`*
+
+
 
 ## License
 
