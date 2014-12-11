@@ -152,3 +152,37 @@ describe("after", function () {
       });
   });
 });
+
+describe("provided", function () {
+
+  it("should conditionally run an async function", function (done) {
+    var f = a.provided(
+      function (x, y) {
+        assert(x === 1);
+        assert(y === 2);
+        return true;
+      },
+      function (x, y, cb) {
+        assert(x === 1);
+        assert(y === 2);
+        assert(typeof cb === "function");
+        done();
+      });
+
+    f(1, 2, noop);
+  });
+
+  it("should conditionally run an async function (false)", function (done) {
+    var f = a.provided(function () { return false; },
+      function () {
+        throw new Error("shouldn't get here");
+      });
+
+    f(1, 2, function (err, x, y) {
+      assert(!err);
+      assert(x === 1);
+      assert(y === 2);
+      done();
+    });
+  });
+});

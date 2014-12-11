@@ -90,6 +90,24 @@ acomb.after = function after(asyncBody, func) {
   };
 };
 
+acomb.provided = function provided(predicate, func) {
+  return function (/*args..., callback*/) {
+    var args = _initial(arguments);
+    var callback = _last(arguments);
+    var result;
+    try {
+      result = predicate.apply(this, args);
+    } catch (e) {
+      return callback(e);
+    }
+    if (result) {
+      return func.apply(this, arguments);
+    } else {
+      callback.apply(null, [null].concat(args));
+    }
+  };
+};
+
 function _last(arr) {
   return arr[arr.length - 1];
 }

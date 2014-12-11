@@ -13,6 +13,7 @@ Designed for use with [async](https://github.com/caolan/async).  Allows you to w
 * [spreadOptions](#spreadOptions)
 * [before](#before)
 * [after](#after)
+* [provided](#provided)
 
 <a name="constant">
 ### constant(value)
@@ -120,7 +121,7 @@ async.waterfall([
 ```
 
 <a name="after">
-### before(asyncFunc, func)
+### after(asyncFunc, func)
 
 Run a synchronous function after an async function, with the results of the async function as arguments. The return value of the sync function will be passed to the original callback.
 
@@ -132,6 +133,21 @@ var getTheDataIWant = acomb.after(getData, function (data) {
 
 *note: If you want to run an async function before or after another,  just use `async.seq` or `async.compose`*
 
+<a name="provided">
+### provided(predicate, func)
+
+Conditionally run an async func based on the results of a predicate.  The predicate function will be passed the same args as the async function.  If the predicate returns false, the args will be passed to the async function's callback.
+
+```js
+async.map(
+  sparseFilenames,
+  acomb.provided(_.identity, acomb.partialRight(fs.readFile, "utf8"))
+  function (err, results) {
+    // results will be an array containing the data of the file names
+    // that actually existed -- no errors due to invalid file names.
+  }
+);
+```
 
 
 ## License
