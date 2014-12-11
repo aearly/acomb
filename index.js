@@ -40,6 +40,23 @@ acomb.partialRight = function partialRight(func/*, boundArgs... */) {
   };
 };
 
+acomb.spreadOptions = function spreadOptions(func, option1/*, option2...*/) {
+  var options;
+  if (Array.isArray(option1)) {
+    options = option1;
+  } else {
+    options = _rest(arguments);
+  }
+  return function (obj, callback) {
+    var newArgs = options.reduce(function(acc, key) {
+      acc.push(obj[key]);
+      return acc;
+    }, []);
+    newArgs.push(callback);
+    func.apply(this, newArgs);
+  };
+};
+
 function _last(arr) {
   return arr[arr.length - 1];
 }

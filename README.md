@@ -78,6 +78,26 @@ async.map(
 ```
 
 
+<a name="spreadOptions">
+### spreadOptions(func, option1, option2, ...)
+
+Takes a function of the form `function(object, callback) {}`  and converts it to the form `function(option1, option2, ... callback) {}` based on the strings passed.  Useful in `async.auto` in conjunction with `flip`.
+
+```js
+function doFoo(bar baz, callback) {
+  // ....
+}
+
+async.auto({
+  bar: getBar,
+  baz: getBaz
+  foo: ["bar", "baz", acomb.flip(acomb.spreadOptions(doFoo, "bar", "baz"))],
+  //...
+}, callback)
+```
+
+
+
 ## License
 
 MIT

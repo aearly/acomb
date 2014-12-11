@@ -71,6 +71,32 @@ describe("partialRight", function () {
   });
 });
 
+describe("spreadOptions", function () {
+  it("should spread options", function () {
+    a.spreadOptions(function (x, y, cb) {
+      assert(x === 1);
+      assert(y === 2);
+      assert(typeof cb === "function");
+    }, "x", "y")({x: 1, y: 2}, function () {});
+  });
+
+  it("should also work with an array arg", function () {
+    a.spreadOptions(function (x, y, cb) {
+      assert(x === 1);
+      assert(y === 2);
+      assert(typeof cb === "function");
+    }, ["x", "y"])({x: 1, y: 2}, function () {});
+  });
+
+  it("should work in conjunction with flip", function () {
+    a.flip(a.spreadOptions(function (x, y, cb) {
+      assert(x === 1);
+      assert(y === 2);
+      assert(typeof cb === "function");
+    }, ["x", "y"]))(function () {}, {x: 1, y: 2});
+  });
+});
+
 /*describe("before", function () {
   it("should run a function before another", function (done) {
     var f = a.before(func, body)
