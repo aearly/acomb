@@ -14,6 +14,7 @@ Designed for use with [async](https://github.com/caolan/async).  Allows you to w
 * [before](#before)
 * [after](#after)
 * [provided](#provided)
+* [ensureAsync](#ensureAsync)
 
 <a name="constant">
 ### constant(value)
@@ -104,7 +105,7 @@ async.auto({
 <a name="before">
 ### before(func, asyncFunc)
 
-Run a synchronous function before an async function.  The synchronous function will be called with the aguments passed (without the callback), and the async function will be called with the return value of the sync function.
+Run a synchronous function before an async function.  The synchronous function will be called with the arguments passed (without the callback), and the async function will be called with the return value of the sync function.
 
 ```js
 function trim (str) { return str.trim(); }
@@ -149,6 +150,23 @@ async.map(
 );
 ```
 
+<a name="ensureAsync">
+### ensureAsync(func)
+
+Ensure that an async function will always call its callback on a later tick in the event loop.  No extra deferrals are added if the function passed does indeed callback asynchronously.  This is useful for preventing stack overflows in things like `async.each`.
+
+```js
+async.map(
+  Array(100000)
+  acomb.ensureAsync(function (value, cb) {
+    if (value < 50000) {
+      return callback(null, value); // this function sometimes is synchronous!
+    }
+    doSomethingAsync(value, callback);
+  }),
+  callback
+); // no stack overflows!
+```
 
 ## License
 

@@ -1,5 +1,12 @@
-var acomb = module.exports = {};
+var acomb = exports;
 var _slice = [].slice;
+var _nextTick = setImmediate;
+
+if (!_nextTick) { // browsers
+  _nextTick = function (fn) {
+    setTimeout(fn, 0);
+  };
+}
 
 acomb.constant = function constant(value) {
   return function (callback) {
@@ -108,6 +115,22 @@ acomb.provided = function provided(predicate, func) {
   };
 };
 
+acomb.ensureAsync = function ensureAsync(func) {
+  return function (/*args..., cb*/) {
+    var args = _initial(arguments);
+    var cb = _last(arguments);
+    var sameStack = true;
+    args.push(function () {
+      if (sameStack) {
+        return _defer(cb, arguments);
+      }
+      cb.apply(null, arguments);
+    });
+    func.apply(this, args);
+    sameStack = false;
+  };
+};
+
 function _last(arr) {
   return arr[arr.length - 1];
 }
@@ -118,4 +141,10 @@ function _initial(arr) {
 
 function _rest(arr) {
   return _slice.call(arr, 1);
+}
+
+function _defer(fn, args) {
+  _nextTick(function () {
+    fn.apply(null, args);
+  });
 }

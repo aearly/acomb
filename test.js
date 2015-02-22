@@ -185,4 +185,36 @@ describe("provided", function () {
       done();
     });
   });
+
+  describe("ensureAsync", function () {
+    it("should defer if a sync function is passed", function (done) {
+      var sameStack = true;
+
+      a.ensureAsync(function (cb) {
+        cb();
+      })(function () {
+        assert(!sameStack);
+        done();
+      });
+
+      sameStack = false;
+    });
+
+    it("should not defer async functions", function (done) {
+      var sameStack;
+      a.ensureAsync(function (arg, cb) {
+        assert(arg === 234);
+        setTimeout(function () {
+          sameStack = true;
+          cb(123, 456);
+          sameStack = false;
+        }, 0);
+      })(234, function (err, result) {
+        assert(err === 123);
+        assert(result === 456);
+        assert(sameStack);
+        done();
+      });
+    });
+  });
 });
