@@ -1,6 +1,6 @@
 {
   "name": "acomb",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Higher-order utilities for use with async functions",
   "main": "index.js",
   "scripts": {
