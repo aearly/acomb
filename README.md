@@ -86,7 +86,7 @@ async.map(
 <a name="spreadOptions">
 ### spreadOptions(func, option1, option2, ...)
 
-Takes a function of the form `function(object, callback) {}`  and converts it to the form `function(option1, option2, ... callback) {}` based on the strings passed.  The strings passed will pick properties from the object and turn them in to direct arguments.  Useful in `async.auto` in conjunction with `flip` for destructuring the results.
+Takes a function of the form `function(object, callback) {}`  and converts it to the form `function(option1, option2, ... callback) {}` based on the strings passed.  The strings passed will pick properties from the object and turn them in to direct arguments.  Useful in `async.auto` in conjunction with `flip` for destructuring the results.  You can also pass an array of strings as the second arg.
 
 ```js
 function doFoo(bar baz, callback) {
@@ -148,6 +148,16 @@ async.map(
     // that actually existed -- no errors due to invalid file names.
   }
 );
+```
+
+You can also pass a boolean directly as the first arg.
+
+```js
+async.waterfall([
+  func1,
+  func2
+  async.provided(NODE_ENV === "dev", func3)
+], done);
 ```
 
 <a name="ensureAsync">

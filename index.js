@@ -106,10 +106,14 @@ acomb.provided = function provided(predicate, func) {
     var args = _initial(arguments);
     var callback = _last(arguments);
     var result;
-    try {
-      result = predicate.apply(this, args);
-    } catch (e) {
-      return callback(e);
+    if (predicate === true || predicate === false) {
+      result = predicate;
+    } else {
+      try {
+        result = predicate.apply(this, args);
+      } catch (e) {
+        return callback(e);
+      }
     }
     if (result) {
       return func.apply(this, arguments);
