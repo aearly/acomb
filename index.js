@@ -1,6 +1,10 @@
 var acomb = exports;
 var _slice = [].slice;
-var _nextTick = setImmediate;
+var _nextTick;
+
+if (typeof setImmediate !== "undefined") {
+  _nextTick = setImmediate;
+}
 
 if (!_nextTick) { // browsers
   _nextTick = function (fn) {
