@@ -22,13 +22,14 @@ acomb.constant = function constant(value) {
 acomb.asyncify = function asyncify(func) {
   return function (/*args..., callback*/) {
     var callback = _last(arguments),
-      args = _initial(arguments);
+      args = _initial(arguments),
+      result;
     try {
-      var result = func.apply(this, args);
-      callback(null, result);
+      result = func.apply(this, args);
     } catch (e) {
-      callback(e);
+      return callback(e);
     }
+    callback(null, result);
   };
 };
 

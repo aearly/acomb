@@ -42,6 +42,18 @@ describe("asyncify", function () {
       done();
     });
   });
+
+  it("should not catch errors in the callback", function (done) {
+    try {
+      a.asyncify(function () {})(function (err) {
+        if (err) { return done(new Error("should not get an error here")); }
+        throw new Error("callback error");
+      });
+    } catch (e) {
+      assert(e.message === "callback error");
+      done();
+    }
+  });
 });
 
 
